@@ -1,0 +1,14 @@
+package webcache_proto;
+
+option java_package = "com.oneboxtech.se.webcache.model.proto";
+option java_outer_classname = "WebCacheDocProtos";
+
+
+message WebCacheDoc{
+ optional int32 version = 1;
+ required int64 crawl_time= 5;
+ required string url = 10;
+ optional bytes utf8_page = 15;
+ optional bytes gzip_compressed_utf8_page = 20;
+ optional bytes title = 25;
+}

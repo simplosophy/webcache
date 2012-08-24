@@ -1,0 +1,13 @@
+#JAVA
+*.class
+# Package Files #
+*.jar
+*.war
+*.ear
+*.log
+*.iml
+*.pyc
+webcache/.idea
+webcache/target
+webcache/out
+tmp/

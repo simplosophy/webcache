@@ -1,0 +1,1 @@
+ ~/wly/build_tools/third_party/bin/protoc --java_out=../java/ hdfs_protos.proto

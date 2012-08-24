@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are  by default assigned the type
+       ch.qos.logback.classic.encoder.PatternLayoutEncoder
+       %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n %caller{1}
+
+       -->
+        <target>System.out</target>
+        <encoder>
+            <pattern><![CDATA[
+                %date %level [%thread] %logger [%file:%line] %msg%n %caller{1}
+            ]]></pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are  by default assigned the type
+       ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <target>System.err</target>
+        <encoder>
+            <pattern><![CDATA[
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            ]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">   
+        <file>webcache.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>webcache.%d{yyyy-MM-dd}..log.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>3</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>
+
+        <encoder>
+            <pattern>%-1relative [%thread] %-5level %logger{0} -- %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="server" level="DEBUG"/>
+    <logger name="client" level="DEBUG"/>
+    <logger name="net" level="DEBUG"/>
+    <logger name="org.apache.http" level="INFO"/>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="STDERR" />-->
+        <!--<appender-ref ref="FILE" />-->
+    </root>
+</configuration>

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>网页快照-黑名单管理</title>
+    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+</head>
+<body>
+<div style=" margin-top: 50px;">
+
+    <h2>说明</h2>
+    <!--<p>
+        快照屏蔽是及时生效的。如果设置成功后没有生效，则是缓存的原因。缓存过期时间为5分钟，如果事情紧急，联系BoTao清除缓存。
+    </p>
+-->
+    <h2>应用程序黑名单接口:</h2>
+    <p>加入黑名单:  http://i676.dong.shgt.qihoo.net:18888/blacklist?op=add&docid=[DOC_ID]</p>
+    <p>移出黑名单:  http://i676.dong.shgt.qihoo.net:18888/blacklist?op=del&docid=[DOC_ID]</p>
+
+
+    <div id="msg" style="float: right;"></div>
+    <h2>人工:</h2>
+    <div>URL:</div><textarea id="url" style="height: 200px;width: 700px"></textarea>
+    <input type="button" value="加入黑名单" id="submit_url">
+
+    <div id="w_msg" style="float: right;"></div>
+    <div></div>
+    <div>URL:</div><textarea id="w_url" style="height: 200px;width: 700px"></textarea>
+    <input type="button" value="移出黑名单" id="submit_w_url">
+
+<!--
+
+    <div>DocID:</div><textarea id="docid" style="height: 200px;width: 700px"></textarea>
+    <input type="button" value="加入黑名单" id="submit_docid">
+-->
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+
+         function blacklistOne(docid){
+            $.get('/blacklist?op=add&docid='+docid, function(){
+                var t = $('#msg').html()
+                $('#msg').html(t+"<br><a target='_blank' href='http://180.153.228.57:2500/snapshot?docid="+docid+"&data_type=json'>"+ docid+'</a> added to blacklist')
+            })
+         }
+
+        function whitelistOne(docid){
+            $.get('/blacklist?op=del&docid='+docid, function(){
+                var t = $('#w_msg').html()
+                $('#w_msg').html(t+"<br><a target='_blank' href='http://180.153.228.57:2500/snapshot?docid="+docid+"&data_type=json'>"+ docid+'</a> removed from blacklist')
+            })
+        }
+
+        $('#submit_url').click(function(){
+            $('#msg').html('')
+            var urls = $('#url').val().split('\n')
+            for(var i in urls){
+                if(urls[i]){
+                $.post('/url2docid', {'url':urls[i]}, function (docid) {
+                    blacklistOne(docid)
+                    $.get('/blacklist',{'op':'log','url':urls[i],action:'blacklist'})
+                })
+                }
+            }
+
+        })
+
+        $('#submit_w_url').click(function(){
+            $('#w_msg').html('')
+            var urls = $('#w_url').val().split('\n')
+            for(var i in urls){
+                if(urls[i]){
+                $.post('/url2docid', {'url':urls[i]}, function (docid) {
+                    whitelistOne(docid)
+                    $.get('/blacklist',{'op':'log','url':urls[i],action:'whitelist'})
+                })
+                }
+            }
+
+        })
+
+
+/*
+        $('#submit_docid').click(function(){
+            $('#msg').html('')
+            var docids= $('#docid').val().split('\n')
+            for(var i in docids){
+                if(docids[i])
+                blacklistOne(docids[i].trim())
+            }
+
+        })*/
+    })
+</script>
+</body>
+</html>
